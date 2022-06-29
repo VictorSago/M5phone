@@ -43,5 +43,6 @@ def insert_entry():
     name = request.args["name"]
     phone = request.args["phone"]
     dum.append((name, phone))
+    #return render_template('list.html', list=dum, date=current_datetime[0])
     return render_template('insert.html', date=current_datetime[0], time=current_datetime[1], inserted_name=name, inserted_phone=phone)
  

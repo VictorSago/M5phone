@@ -7,27 +7,25 @@ dum = [
 
 app = Flask(__name__)
 
-@app.route("/")
-def start():
+def get_datetime():
     now = datetime.datetime.now()
+    current_time = [str(now.hour), str(now.minute)]
     current_date = [str(now.year), str(now.month), str(now.day)]
     if len(current_date[1]) < 2:
         current_date[1] = '0' + current_date[1]
     if len(current_date[2]) < 2:
         current_date[2] = '0' + current_date[2]
-    return render_template('list.html', list=dum, date=current_date)
+    return current_date, current_time
+    
+
+@app.route("/")
+def start():
+    current_datetime = get_datetime()
+    return render_template('list.html', list=dum, date=current_datetime[0])
 
 @app.route("/delete")
 def delete_entry():
-    now = datetime.datetime.now()
-    current_date = [str(now.year), str(now.month), str(now.day)]
-    current_time = [str(now.hour), str(now.minute)]
-    if len(current_date[1]) < 2:
-        current_date[1] = '0' + current_date[1]
-    if len(current_date[2]) < 2:
-        current_date[2] = '0' + current_date[2]
-    error = None
-    meth = request.method
+    current_datetime = get_datetime()
     name = request.args["name"]
     deleted = False
     for item in dum:
@@ -37,20 +35,13 @@ def delete_entry():
             break
     if not deleted:
         name = None
-    return render_template('delete.html', date=current_date, time=current_time, deleted_name=name, error=error, method=meth)
+    return render_template('delete.html', date=current_datetime[0], time=current_datetime[1], deleted_name=name)
 
 @app.route("/insert")
 def insert_entry():
-    now = datetime.datetime.now()
-    current_date = [str(now.year), str(now.month), str(now.day)]
-    current_time = [str(now.hour), str(now.minute)]
-    if len(current_date[1]) < 2:
-        current_date[1] = '0' + current_date[1]
-    if len(current_date[2]) < 2:
-        current_date[2] = '0' + current_date[2]
-    error = None
+    current_datetime = get_datetime()
     name = request.args["name"]
     phone = request.args["phone"]
     dum.append((name, phone))
-    return render_template('insert.html', date=current_date, time=current_time, inserted_name=name, inserted_phone=phone, error=error)
+    return render_template('insert.html', date=current_datetime[0], time=current_datetime[1], inserted_name=name, inserted_phone=phone)
  

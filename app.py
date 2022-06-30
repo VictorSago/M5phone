@@ -1,5 +1,10 @@
 from flask import *
 import datetime
+import sqlite3
+from sqlite3 import Error
+
+db_file = "phone.db"
+table = "phonelist"
 
 dum = [
   ('arne', '013-131313'), ('berith','01234'), ('caesar','077-1212321')
